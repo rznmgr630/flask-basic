@@ -1,20 +1,25 @@
-from flask import Flask,render_template;
+from flask import Flask,redirect,url_for;
 
-app=Flask(__name__)
+app=Flask(__name__);
 
-# Note: The route /flask can only handle the url /path but /python/ can handle both  /python and /python/
-@app.route('/')
-def hello_world():
-   return 'Hello world'
+@app.route('/admin')
+def hello_admin():
+  return 'Hello Admin'
 
-@app.route('/<int:userId>')
-def get_user(userId):
-   # return f'User id is {userId}'
-   return 'User id is %d' % userId
 
-@app.route('/html')
-def get_html():
-   return render_template('index.html')
+@app.route('/guest/<guest>')
+def hello_guest(guest):
+#   return f'Hello ${guest}';
+   return 'Hello %s' % guest
+
+
+@app.route('/user/<name>')
+def hello_user(name):
+   if name=='admin':
+      return redirect(url_for('hello_admin'))
+   else:
+      return redirect(url_for('hello_guest',guest=name))
+   
 
 if __name__=='__main__':
    app.run(debug=True)
